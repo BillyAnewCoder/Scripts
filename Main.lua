@@ -53,7 +53,7 @@ RunService:BindToRenderStep("RealWalls", Enum.RenderPriority.Camera.Value - 1, f
 	end
 end)
 
-local mainWindow = Library:CreateWindow("Squares' Hitbox Extender")
+local mainWindow = Library:CreateWindow("Coddemons' Hitbox Extender")
 local mainTab = mainWindow:AddTab("Main")
 local mainGroupbox = mainTab:AddLeftGroupbox("Hitbox Extender")
 local espGroupbox = mainTab:AddLeftGroupbox("ESP")
