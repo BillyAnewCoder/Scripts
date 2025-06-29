@@ -1,7 +1,7 @@
-if getgenv().FurryHBELoaded ~= nil then
+if getgenv().RealHBELoaded ~= nil then
 	return
 end
-getgenv().FurryHBELoaded = false
+getgenv().RealHBELoaded = false
 
 if not game:IsLoaded() then
 	game.Loaded:Wait()
@@ -14,7 +14,7 @@ end
 local Library = loadstring(game:HttpGet("https://raw.githubusercontent.com/RectangularObject/LinoriaLib/main/Library.lua"))()
 local SaveManager = loadstring(game:HttpGet("https://raw.githubusercontent.com/RectangularObject/LinoriaLib/main/addons/SaveManager.lua"))()
 SaveManager:SetLibrary(Library)
-SaveManager:SetFolder("FurryHBE")
+SaveManager:SetFolder("RealHBE")
 
 local Teams = game:GetService("Teams")
 local Players = game:GetService("Players")
@@ -29,13 +29,13 @@ local players = {}
 local entities = {}
 local teamModule = nil
 
---[[ PhysicsService:CreateCollisionGroup("furryCollisions")
+--[[ PhysicsService:CreateCollisionGroup("RealCollisions")
 for _, v in pairs(PhysicsService:GetCollisionGroups()) do
-	PhysicsService:CollisionGroupSetCollidable(PhysicsService:GetCollisionGroupName(v.id), "furryCollisions", false)
+	PhysicsService:CollisionGroupSetCollidable(PhysicsService:GetCollisionGroupName(v.id), "RealCollisions", false)
 end ]]
 
 local function updatePlayers()
-	if not getgenv().FurryHBELoaded then return end
+	if not getgenv().RealHBELoaded then return end
 	for _, v in pairs(players) do
 		task.spawn(function()
 			v:Update()
@@ -43,8 +43,8 @@ local function updatePlayers()
 	end
 end
 
-RunService:BindToRenderStep("furryWalls", Enum.RenderPriority.Camera.Value - 1, function()
-	if not getgenv().FurryHBELoaded then return end
+RunService:BindToRenderStep("RealWalls", Enum.RenderPriority.Camera.Value - 1, function()
+	if not getgenv().RealHBELoaded then return end
 	Camera = Workspace.CurrentCamera
 	for _, v in pairs(players) do
 		task.spawn(function()
@@ -295,7 +295,7 @@ local function addPlayer(player)
 			properties.CollisionGroupId = value
 			getCollisionGroupHook:Modify("CollisionGroupId", properties.CollisionGroupId)
 			if Toggles.extenderToggled.Value and not Toggles.collisionsToggled.Value then
-				return PhysicsService:GetCollisionGroupId("furryCollisions")
+				return PhysicsService:GetCollisionGroupId("RealCollisions")
 			end
 			return properties.CollisionGroupId
 		end) ]]
@@ -349,7 +349,7 @@ local function addPlayer(player)
 				--[[ if part.Name == "Head" or part.Name == "HumanoidRootPart" then
 					part.CanCollide = false
 				else
-					part.CollisionGroupId = PhysicsService:GetCollisionGroupId("furryCollisions")
+					part.CollisionGroupId = PhysicsService:GetCollisionGroupId("RealCollisions")
 				end ]]
 				part.CanCollide = false
 			else
@@ -672,7 +672,7 @@ if game.PlaceId == 111311599 then
 	anticheat.Disabled = true
 end
 
-getgenv().FurryHBELoaded = true
+getgenv().RealHBELoaded = true
 updatePlayers()
 Library:Notify("hai :3")
 Library:Notify("Press " .. Library.ToggleKeybind.Value .. " to open the menu")
