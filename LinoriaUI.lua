@@ -5714,8 +5714,66 @@ function Library:CreateWindow(...)
         elseif Input.KeyCode == Enum.KeyCode.RightControl or (Input.KeyCode == Enum.KeyCode.RightShift and (not Processed)) then
             task.spawn(Library.Toggle)
         end
-    end));
+    end));                                                                                                                                                                                        
+     -- ======================================================================
+-- Desktop floating "Toggle UI" button (for keyboards without End key)
+-- ======================================================================
+if not Library.IsMobile then
+    local ScreenGui = Instance.new("ScreenGui")
+    ScreenGui.Name = "HBE_ToggleUI"
+    ScreenGui.ResetOnSpawn = false
+    ScreenGui.IgnoreGuiInset = true
+    ScreenGui.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
+    ScreenGui.Parent = game:GetService("CoreGui")
 
+    local ToggleUIButton = Instance.new("TextButton")
+    ToggleUIButton.Name = "ToggleUIBtn"
+    ToggleUIButton.Size = UDim2.new(0, 100, 0, 30)
+    ToggleUIButton.Position = UDim2.new(0, 10, 0, 10)
+    ToggleUIButton.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
+    ToggleUIButton.BorderColor3 = Color3.fromRGB(100, 100, 100)
+    ToggleUIButton.BackgroundTransparency = 0.1
+    ToggleUIButton.Font = Enum.Font.SourceSansBold
+    ToggleUIButton.Text = "Toggle UI"
+    ToggleUIButton.TextColor3 = Color3.new(1,1,1)
+    ToggleUIButton.TextSize = 14
+    ToggleUIButton.ZIndex = 9999
+    ToggleUIButton.Parent = ScreenGui
+
+    -- Simple drag handler
+    local dragging, dragStart, startPos
+    local UIS = game:GetService("UserInputService")
+
+    ToggleUIButton.InputBegan:Connect(function(input)
+        if input.UserInputType == Enum.UserInputType.MouseButton1 then
+            dragging = true
+            dragStart = input.Position
+            startPos = ToggleUIButton.Position
+            input.Changed:Connect(function()
+                if input.UserInputState == Enum.UserInputState.End then
+                    dragging = false
+                end
+            end)
+        end
+    end)
+
+    ToggleUIButton.InputChanged:Connect(function(input)
+        if input.UserInputType == Enum.UserInputType.MouseMovement then
+            if dragging then
+                local delta = input.Position - dragStart
+                ToggleUIButton.Position = UDim2.new(
+                    startPos.X.Scale, startPos.X.Offset + delta.X,
+                    startPos.Y.Scale, startPos.Y.Offset + delta.Y
+                )
+            end
+        end
+    end)
+
+    ToggleUIButton.MouseButton1Click:Connect(function()
+        Library:Toggle()
+    end)
+end
+-- ======================================================================                                                                                                                                                                                             
     if Library.IsMobile then
         local ToggleUIOuter = Library:Create('Frame', {
             BorderColor3 = Color3.new(0, 0, 0);
